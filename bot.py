@@ -1586,7 +1586,7 @@ def only_sudo(func):
 
 
 
-            await update.message.reply_text("❌ 𝐑ᴏʜɪᴛ ⋆ ˚｡⋆୨୧˚ 𝐑EBEL .⋆ ˚୨୧⋆｡˚ ⋆ 𝐒ᴇ 𝐒ᴜᴅᴏ 𝐋ᴇᴋᴇ 𝐀ᴀ🤢")
+            await update.message.reply_text("❌  ⋆ ˚｡⋆୨୧˚ 𝐑ᴏʜɪᴛ .⋆ ˚୨୧⋆｡˚ ⋆ 𝐒ᴇ 𝐒ᴜᴅᴏ 𝐋ᴇᴋᴇ 𝐀ᴀ🤢")
 
 
 
