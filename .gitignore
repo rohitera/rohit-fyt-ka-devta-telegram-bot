@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.env
+.env.*
+rebel.json
+rebel_config.json
+pfp_pool/
