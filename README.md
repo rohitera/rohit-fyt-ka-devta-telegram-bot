@@ -4,7 +4,7 @@ Railway-ready Python deployment for the ROHIT FYT KA DEVTA Telegram bot. The exi
 
 ## Railway variables
 
-Set `BOT_TOKEN` for one bot, or `BOT_TOKENS` for multiple comma/newline-separated Telegram bot tokens. Do not commit tokens. `GITHUB_USERNAME` is optional metadata and is set to `rohitera` in `.env.example`; `GITHUB_TOKEN` is not read or stored by the bot.
+Set `BOT_TOKEN` for one bot, or `BOT_TOKENS` for multiple comma/newline-separated Telegram bot tokens. Set `OWNER_ID` to the owner's numeric Telegram user ID and optionally set `SUDO_IDS` to comma/newline-separated trusted user IDs. `ADMIN_IDS` is accepted as a backwards-compatible alias for `SUDO_IDS`. Only the owner and sudo IDs can use privileged commands. Do not commit tokens. `GITHUB_USERNAME` is optional metadata and is set to `rohitera` in `.env.example`; `GITHUB_TOKEN` is not read or stored by the bot.
 
 The uploaded source previously contained exposed Telegram tokens. Those values were removed from the deployable files; rotate/revoke them in BotFather before using replacement tokens. GitHub tokens must never be committed to this repository.
 
