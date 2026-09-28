@@ -419,7 +419,7 @@ class MenuConfig:
 🫧 ‧˚ **U T I L I T Y**
 ʚ `⌜ utility ⌟`  ⊹  Shinobi Tools
 
-✧ *Powered by ROHIT FYT KA DEVTA* ✧"""
+✧ *Powered by NYXON* ✧"""
 
 
 
@@ -468,22 +468,26 @@ class MenuConfig:
 ʚ `~nc2 <name>`  ⊹  God Mode
 ʚ `~nc3 <name>`  ⊹  Time Shift
 ʚ `~nc4 <name>`  ⊹  Custom Mix
+ʚ `~nc5 <text>`  ⊹  CSWORD Loop
+ʚ `~nc6 <text>`  ⊹  NCBRA Loop
+ʚ `~raidnc <name>`  ⊹  Raid NC
+ʚ `~rishunc <name>`  ⊹  ROHIT Loop
+ʚ `~rohitncgodspeed <name>`  ⊹  God Speed
 
 🕯️ ‧˚ **S P A M  S T R I K E**
 ʚ `~spamemo <text>`  ⊹  Emoji Spam
 ʚ `~spam <text>`  ⊹  Text Spam
 ʚ `~raidspam <name>`  ⊹  Raid Spam
 ʚ `~swipe <target>`  ⊹  Swipe Attack
+ʚ `~targetslide <target>`  ⊹  Target Slide
 ʚ `~slidespam`  ⊹  Slide Spam
 
 🫧 ‧˚ **S P E C I A L  A B I L I T I E S**
 ʚ `~over <target>`  ⊹  Game Over
-ʚ `~raidnc <name>`  ⊹  Raid NC
-
 🍰 ‧˚ **E M E R G E N C Y**
 ʚ `~stop`  ⊹  Abort Attack
 
-✧ *Powered by ROHIT FYT KA DEVTA* ✧"""
+✧ *Powered by NYXON* ✧"""
 
 
 
@@ -529,7 +533,7 @@ class MenuConfig:
 
 🎵 ‧˚ **M U S I C  C O M M A N D S**
 ʚ `~song <name>`  ⊹  Search & Download
-✧ *Powered by ROHIT FYT KA DEVTA* ✧"""
+✧ *Powered by NYXON* ✧"""
 
 
 
@@ -589,8 +593,9 @@ class MenuConfig:
 ʚ `~setvideoutility`  ⊹  Utility Video
 ʚ `~setvideostatus`  ⊹  Status Video
 ʚ `~setvideoover`  ⊹  GameOver Video
+ʚ `~sethelpvideo`  ⊹  Help Video
 
-✧ *Settings Apply Instantly* ✧"""
+✧ *Powered by NYXON · Owner/Sudo Only* ✧"""
 
 
 
@@ -643,7 +648,10 @@ class MenuConfig:
 🎯 ‧˚ **S P E C I F I C  S T O P S**
 ʚ `~stopraidnc`  ⊹  Halt Raid NC
 ʚ `~stoprohitnc`  ⊹  Halt ROHIT  NC
+ʚ `~stoprishunc`  ⊹  Halt Rishun NC
 ʚ `~stopswipe`  ⊹  Halt Swipe
+ʚ `~stopslide`  ⊹  Halt Slide
+ʚ `~stopslidespam`  ⊹  Halt Slide Spam
 ʚ `~stopphoto`  ⊹  Halt Photo Loop
 
 🫧 ‧˚ **E M E R G E N C Y  E X I T**
@@ -706,7 +714,7 @@ class MenuConfig:
 ʚ `~status`  ⊹  Bot Status
 ʚ `~threadstatus`  ⊹  Thread Status
 
-✧ *ROHIT-Only Commands* ✧"""
+✧ *Powered by NYXON · Owner/Sudo Only* ✧"""
 
 
 
@@ -759,7 +767,7 @@ class MenuConfig:
 📊 ‧˚ **S T A T U S  S E N S O R**
 ʚ `~status`  ⊹  Bot Status
 
-✧ *ROHIT Utility Commands* ✧"""
+✧ *Powered by NYXON* ✧"""
 
 
 
@@ -978,7 +986,7 @@ def get_main_keyboard():
 
 
 
-            InlineKeyboardButton("🗡️ Attack", callback_data="menu_attack"),
+            InlineKeyboardButton("⚔️ Attack", callback_data="menu_attack"),
 
 
 
@@ -992,7 +1000,7 @@ def get_main_keyboard():
 
 
 
-            InlineKeyboardButton("⚙️ Settings", callback_data="menu_settings")
+            InlineKeyboardButton("⚙️ Settings", callback_data="menu_settings"),
 
 
 
@@ -1013,14 +1021,14 @@ def get_main_keyboard():
 
 
 
-            InlineKeyboardButton("🛑 Stop Cmds", callback_data="menu_stop"),
+            InlineKeyboardButton("🛑 Stop", callback_data="menu_stop"),
 
 
 
 
 
 
-            InlineKeyboardButton("👑 Admin Ctrl", callback_data="menu_admin"),
+            InlineKeyboardButton("👑 Admin", callback_data="menu_admin"),
 
 
 
@@ -1048,14 +1056,12 @@ def get_main_keyboard():
 
 
 
-            InlineKeyboardButton("📊 Status", callback_data="status"),
 
 
 
 
 
 
-            InlineKeyboardButton("📖 Full Help", callback_data="help_full")
 
 
 
@@ -1076,6 +1082,7 @@ def get_main_keyboard():
 
 
 
+    keyboard = [row for row in keyboard if row]
     return InlineKeyboardMarkup(keyboard)
 
 
@@ -1477,7 +1484,7 @@ def only_admin(func):
 
 
 
-        if not is_admin(update.effective_user.id):
+        if func.__name__ != "cmd_menu" and not is_admin(update.effective_user.id):
 
 
 
@@ -8040,7 +8047,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-        help_text = get_help_text()
+        help_text = get_command_index_text()
 
 
 
@@ -8273,7 +8280,7 @@ def get_help_text():
 
 
 
-✧ *Powered by ROHIT FYT KA DEVTA* ✧
+✧ *Powered by NYXON* ✧
 
 
 
@@ -8299,6 +8306,58 @@ def get_help_text():
 
 
 
+
+
+def get_command_index_text():
+    """Return the complete index for every registered prefix command."""
+    p = CMD_PREFIX
+    return f"""🌸 ⊹ **R O H I T  F Y T  K A  D E V T A** ⊹ 🌸
+
+📚 **C O M M A N D  I N D E X**
+Use `{p}menu` for the buttons. Commands below use the current prefix `{p}`.
+
+⚔️ **A T T A C K  /  N A M E  C H A N G E R**
+`{p}nc1 [name]` · `{p}nc2 [name]` · `{p}nc3 [name]` · `{p}nc4 [name]`
+`{p}nc5 [text]` · `{p}nc6 [text]` · `{p}raidnc [name]`
+`{p}rishunc [name]` · `{p}rohitnc [name]`
+`{p}rishuncgodspeed [name]` · `{p}rohitncgodspeed [name]`
+`{p}over [target]`
+
+💥 **S P A M  /  S L I D E**
+`{p}spamemo [text]` · `{p}spam [text]` · `{p}raidspam [name]`
+`{p}swipe [target]` · `{p}targetslide [target]`
+`{p}slidespam` · `{p}song [name]`
+
+🛑 **S T O P  C O N T R O L**
+`{p}stop` · `{p}stopall` · `{p}stopspam` · `{p}stopnc`
+`{p}stopraidnc` · `{p}stoprishunc` · `{p}stoprohitnc`
+`{p}stopswipe` · `{p}stopslide` · `{p}stopslidespam`
+`{p}stopphoto` · `{p}bye` · `{p}leave`
+
+🌀 **U T I L I T Y  /  P H O T O**
+`{p}savephoto` · `{p}startphoto` · `{p}stopphoto` · `{p}clearphotos`
+`{p}status` · `{p}threadstatus`
+
+⚙️ **S E T T I N G S  /  M E D I A**
+`{p}speed [0-5]` · `{p}ncthreads [20-50]` · `{p}spamthreads [20-50]`
+`{p}setprefix [symbol]`
+`{p}setvideomain` · `{p}setvideoattack` · `{p}setvideomusic`
+`{p}setvideosettings` · `{p}setvideosstop` · `{p}setvideoadmin`
+`{p}setvideoutility` · `{p}setvideostatus` · `{p}setvideoover`
+`{p}sethelpvideo`
+
+👑 **A D M I N  /  B O T  C O N T R O L**
+`{p}entrust [id]` · `{p}revoke [id]` · `{p}list`
+`{p}upall` · `{p}addbot [token]`
+
+🧭 **M E N U  A L I A S E S**
+`{p}start` · `{p}menu` · `{p}vmenu` · `{p}videomenu` · `{p}help`
+`{p}helptext` · `{p}m1` · `{p}m2` · `{p}m3` · `{p}m4` · `{p}m5`
+`{p}m6` · `{p}m7` · `{p}m8` · `{p}m9`
+
+🔐 Admin, attack, media, and control commands follow the owner/sudo access rules.
+
+✧ *Powered by NYXON* ✧"""
 
 
 # Helper and decorator definitions moved to the top of the file
@@ -14576,13 +14635,11 @@ async def cmd_help(update, context):
 
 
 async def cmd_helptext(update, context):
-
-
-
-
-
-
-    await dummy_reply(update, context)
+    if update.message:
+        await update.message.reply_text(
+            get_command_index_text(),
+            parse_mode="Markdown",
+        )
 
 
 
@@ -15828,7 +15885,12 @@ async def _send_menu(update, menu):
 
 
 
-            await update.message.reply_photo(photo=menu["video"], caption=menu["caption"], parse_mode="Markdown")
+            await update.message.reply_photo(
+                photo=menu["video"],
+                caption=menu["caption"],
+                parse_mode="Markdown",
+                reply_markup=get_back_keyboard(),
+            )
 
 
 
@@ -15842,7 +15904,12 @@ async def _send_menu(update, menu):
 
 
 
-            await update.message.reply_video(video=menu["video"], caption=menu["caption"], parse_mode="Markdown")
+            await update.message.reply_video(
+                video=menu["video"],
+                caption=menu["caption"],
+                parse_mode="Markdown",
+                reply_markup=get_back_keyboard(),
+            )
 
 
 
@@ -15856,7 +15923,11 @@ async def _send_menu(update, menu):
 
 
 
-        await update.message.reply_text(f"❌ Media error: {e}\n\n{menu.get('caption', '')}", parse_mode="Markdown")
+        await update.message.reply_text(
+            f"❌ Media error: {e}\n\n{menu.get('caption', '')}",
+            parse_mode="Markdown",
+            reply_markup=get_back_keyboard(),
+        )
 
 
 
