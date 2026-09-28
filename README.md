@@ -34,11 +34,11 @@ The main menu is named **ROHIT FYT KA DEVTA**. It keeps these working sections:
 `OWNER_ID` and `SUDO_IDS` are the only IDs allowed to use privileged commands. Other users can browse the normal menu, but a blocked text command receives:
 
 ```text
-❌ Sirf owner ya sudo user ye command use kar sakta hai.
+❌ 𝐑ɴᴅʏ 𝐒ᴏɴ ⋆ 𝐑ᴏʜɪᴛ sᴇ ᴊᴀᴋᴇ ʙɪᴋʜ ᴍᴀɴɢ ᴘᴇʜʟᴇ 😂
 ```
 
 If a non-owner opens **Admin Ctrl**, the button shows:
 
 ```text
-❌ You are not admin!
+❌ 𝐑ɴᴅʏ 𝐒ᴏɴ ⋆ 𝐑ᴏʜɪᴛ sᴇ ᴊᴀᴋᴇ ʙɪᴋʜ ᴍᴀɴɢ ᴘᴇʜʟᴇ 😂
 ```
