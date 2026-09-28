@@ -16,3 +16,29 @@ BOT_TOKEN=your_token python3 bot.py
 ```
 
 Railway uses `railway.json`/`Procfile` and starts `python3 bot.py`.
+
+## Menu and features
+
+The main menu is named **ROHIT FYT KA DEVTA**. It keeps these working sections:
+
+- **Attack** — name changer modes, spam modes, swipe/slide actions, raid NC, game-over action, and stop.
+- **Music** — song search and playback.
+- **Settings** — speed, NC/spam thread controls, prefix changes, and per-menu media settings.
+- **Stop Cmds** — current, global, spam, NC, raid NC, swipe, photo-loop, and bot-exit controls.
+- **Admin Ctrl** — owner/sudo-only user management, bot management, status, and thread status.
+- **Utility** — group photo save/loop/cleanup and status.
+- **Status / Full Help** — live status and the complete registered command list.
+
+## Access behavior
+
+`OWNER_ID` and `SUDO_IDS` are the only IDs allowed to use privileged commands. Other users can browse the normal menu, but a blocked text command receives:
+
+```text
+❌ Sirf owner ya sudo user ye command use kar sakta hai.
+```
+
+If a non-owner opens **Admin Ctrl**, the button shows:
+
+```text
+❌ You are not admin!
+```
