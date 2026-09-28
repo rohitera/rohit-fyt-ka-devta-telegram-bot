@@ -471,7 +471,6 @@ class MenuConfig:
 ʚ `~nc5 <text>`  ⊹  CSWORD Loop
 ʚ `~nc6 <text>`  ⊹  NCBRA Loop
 ʚ `~raidnc <name>`  ⊹  Raid NC
-ʚ `~rishunc <name>`  ⊹  ROHIT Loop
 ʚ `~rohitncgodspeed <name>`  ⊹  God Speed
 
 🕯️ ‧˚ **S P A M  S T R I K E**
@@ -648,7 +647,6 @@ class MenuConfig:
 🎯 ‧˚ **S P E C I F I C  S T O P S**
 ʚ `~stopraidnc`  ⊹  Halt Raid NC
 ʚ `~stoprohitnc`  ⊹  Halt ROHIT  NC
-ʚ `~stoprishunc`  ⊹  Halt Rishun NC
 ʚ `~stopswipe`  ⊹  Halt Swipe
 ʚ `~stopslide`  ⊹  Halt Slide
 ʚ `~stopslidespam`  ⊹  Halt Slide Spam
@@ -7608,6 +7606,49 @@ async def cmd_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
+async def _update_menu_message(query, menu, keyboard):
+    """Update a menu without breaking when Telegram rejects media replacement."""
+    message = query.message
+    media_class = InputMediaPhoto if menu.get("type") == "photo" else InputMediaVideo
+
+    try:
+        await message.edit_media(
+            media_class(
+                media=menu["video"],
+                caption=menu["caption"],
+                parse_mode="Markdown",
+            ),
+            reply_markup=keyboard,
+        )
+        return
+    except Exception as media_error:
+        logger.debug("Menu media replacement failed: %s", media_error)
+
+    try:
+        if message.caption is not None or message.photo or message.video:
+            await message.edit_caption(
+                caption=menu["caption"],
+                parse_mode="Markdown",
+                reply_markup=keyboard,
+            )
+        else:
+            await message.edit_text(
+                menu["caption"],
+                parse_mode="Markdown",
+                reply_markup=keyboard,
+            )
+        return
+    except Exception as edit_error:
+        logger.debug("Menu message edit failed: %s", edit_error)
+
+    # Last-resort path: never leave a pressed button with no response.
+    await message.reply_text(
+        menu["caption"],
+        parse_mode="Markdown",
+        reply_markup=keyboard,
+    )
+
+
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
@@ -7717,6 +7758,23 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     await query.answer()
+    if data == "menu_main":
+        await _update_menu_message(
+            query,
+            menu_config.get_menu("main"),
+            get_main_keyboard(),
+        )
+        return
+
+    if data.startswith("menu_"):
+        category = data.removeprefix("menu_")
+        if category in menu_config.menus:
+            await _update_menu_message(
+                query,
+                menu_config.get_menu(category),
+                get_back_keyboard(),
+            )
+            return
 
     if data == "menu_main":
 
@@ -8319,8 +8377,7 @@ Use `{p}menu` for the buttons. Commands below use the current prefix `{p}`.
 ⚔️ **A T T A C K  /  N A M E  C H A N G E R**
 `{p}nc1 [name]` · `{p}nc2 [name]` · `{p}nc3 [name]` · `{p}nc4 [name]`
 `{p}nc5 [text]` · `{p}nc6 [text]` · `{p}raidnc [name]`
-`{p}rishunc [name]` · `{p}rohitnc [name]`
-`{p}rishuncgodspeed [name]` · `{p}rohitncgodspeed [name]`
+`{p}rohitnc [name]` · `{p}rohitncgodspeed [name]`
 `{p}over [target]`
 
 💥 **S P A M  /  S L I D E**
@@ -8330,7 +8387,7 @@ Use `{p}menu` for the buttons. Commands below use the current prefix `{p}`.
 
 🛑 **S T O P  C O N T R O L**
 `{p}stop` · `{p}stopall` · `{p}stopspam` · `{p}stopnc`
-`{p}stopraidnc` · `{p}stoprishunc` · `{p}stoprohitnc`
+`{p}stopraidnc` · `{p}stoprohitnc`
 `{p}stopswipe` · `{p}stopslide` · `{p}stopslidespam`
 `{p}stopphoto` · `{p}bye` · `{p}leave`
 
@@ -16186,7 +16243,6 @@ async def handle_prefix_commands(update: Update, context: ContextTypes.DEFAULT_T
 
 
 
-        "rishunc": cmd_rishunc,
         "rohitnc": cmd_rishunc,
 
 
@@ -16194,7 +16250,6 @@ async def handle_prefix_commands(update: Update, context: ContextTypes.DEFAULT_T
 
 
 
-        "rishuncgodspeed": cmd_rishuncgodspeed,
         "rohitncgodspeed": cmd_rishuncgodspeed,
 
 
@@ -16202,7 +16257,6 @@ async def handle_prefix_commands(update: Update, context: ContextTypes.DEFAULT_T
 
 
 
-        "stoprishunc": cmd_stoprishunc,
         "stoprohitnc": cmd_stoprishunc,
 
 
@@ -16909,7 +16963,6 @@ def build_app(token):
 
 
 
-    app.add_handler(CommandHandler("rishunc", cmd_rishunc))
     app.add_handler(CommandHandler("rohitnc", cmd_rishunc))
 
 
@@ -16917,7 +16970,6 @@ def build_app(token):
 
 
 
-    app.add_handler(CommandHandler("rishuncgodspeed", cmd_rishuncgodspeed))
     app.add_handler(CommandHandler("rohitncgodspeed", cmd_rishuncgodspeed))
 
 
@@ -16925,7 +16977,6 @@ def build_app(token):
 
 
 
-    app.add_handler(CommandHandler("stoprishunc", cmd_stoprishunc))
     app.add_handler(CommandHandler("stoprohitnc", cmd_stoprishunc))
 
 
