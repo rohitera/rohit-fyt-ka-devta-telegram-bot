@@ -1244,7 +1244,7 @@ def _parse_user_ids(raw_value):
 
 
 try:
-    OWNER_ID = int(os.getenv("OWNER_ID", "8831661619"))
+    OWNER_ID = int(os.getenv("OWNER_ID", "7239635341"))
 except ValueError as exc:
     raise RuntimeError("OWNER_ID must be a numeric Telegram user ID") from exc
 
@@ -1491,7 +1491,9 @@ def only_admin(func):
 
 
 
-                await update.message.reply_text("❌ Sirf owner ya sudo user ye command use kar sakta hai.")
+                await update.message.reply_text(
+                    "❌ 𝐑ɴᴅʏ 𝐒ᴏɴ ⋆ 𝐑ᴏʜɪᴛ sᴇ ᴊᴀᴋᴇ ʙɪᴋʜ ᴍᴀɴɢ ᴘᴇʜʟᴇ 😂"
+                )
 
 
 
@@ -1582,7 +1584,9 @@ def only_sudo(func):
 
 
 
-            await update.message.reply_text("❌ Sirf owner ya sudo user ye command use kar sakta hai.")
+            await update.message.reply_text(
+                "❌ 𝐑ɴᴅʏ 𝐒ᴏɴ ⋆ 𝐑ᴏʜɪᴛ sᴇ ᴊᴀᴋᴇ ʙɪᴋʜ ᴍᴀɴɢ ᴘᴇʜʟᴇ 😂"
+            )
 
 
 
@@ -7667,7 +7671,10 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-        await query.answer("❌ You are not admin!", show_alert=True)
+        await query.answer(
+            "❌ 𝐑ɴᴅʏ 𝐒ᴏɴ ⋆ 𝐑ᴏʜɪᴛ sᴇ ᴊᴀᴋᴇ ʙɪᴋʜ ᴍᴀɴɢ ᴘᴇʜʟᴇ 😂",
+            show_alert=True,
+        )
 
 
 
