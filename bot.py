@@ -1230,14 +1230,28 @@ except ImportError:
 
 
 
-CHAT_ID = 8831661619
+def _parse_user_ids(raw_value):
+    user_ids = set()
+    for value in re.split(r"[,\s]+", raw_value or ""):
+        value = value.strip()
+        if not value:
+            continue
+        try:
+            user_ids.add(int(value))
+        except ValueError:
+            logger.warning("Ignoring invalid Telegram user ID: %s", value)
+    return user_ids
 
 
+try:
+    OWNER_ID = int(os.getenv("OWNER_ID", "8831661619"))
+except ValueError as exc:
+    raise RuntimeError("OWNER_ID must be a numeric Telegram user ID") from exc
 
-
-
-
-OWNER_ID = 8831661619
+CHAT_ID = int(os.getenv("CHAT_ID", str(OWNER_ID)))
+configured_sudo_ids = _parse_user_ids(
+    os.getenv("SUDO_IDS") or os.getenv("ADMIN_IDS", "")
+)
 
 
 
@@ -1405,20 +1419,8 @@ def save_admins(admins):
 
 
 admin_ids = load_admins()
-
-
-
-
-
-
-admin_ids.add(OWNER_ID)
-
-
-
-
-
-
-admin_ids.add(8831661619)
+sudo_ids = {OWNER_ID, *configured_sudo_ids}
+admin_ids.update(sudo_ids)
 
 
 
@@ -1433,13 +1435,7 @@ admin_ids.add(8831661619)
 
 
 def is_admin(user_id):
-
-
-
-
-
-
-    return user_id in admin_ids
+    return user_id in sudo_ids
 
 
 
@@ -1495,7 +1491,7 @@ def only_admin(func):
 
 
 
-                await update.message.reply_text("❌ 𝐑ᴏʜɪᴛ ⋆ ˚｡⋆୨୧˚ 𝐑EBEL .⋆ ˚୨୧⋆｡˚ ⋆ 𝐒ᴇ 𝐒ᴜᴅᴏ 𝐋ᴇᴋᴇ 𝐀ᴀ😂")
+                await update.message.reply_text("❌ Sirf owner ya sudo user ye command use kar sakta hai.")
 
 
 
@@ -1565,7 +1561,7 @@ def only_sudo(func):
 
 
 
-        if uid == OWNER_ID or uid == 8831661619:
+        if uid in sudo_ids:
 
 
 
@@ -1586,7 +1582,7 @@ def only_sudo(func):
 
 
 
-            await update.message.reply_text("❌  ⋆ ˚｡⋆୨୧˚ 𝐑ᴏʜɪᴛ .⋆ ˚୨୧⋆｡˚ ⋆ 𝐒ᴇ 𝐒ᴜᴅᴏ 𝐋ᴇᴋᴇ 𝐀ᴀ🤢")
+            await update.message.reply_text("❌ Sirf owner ya sudo user ye command use kar sakta hai.")
 
 
 
@@ -13654,6 +13650,7 @@ async def cmd_entrust(update, context):
 
 
         admin_ids.add(uid)
+        sudo_ids.add(uid)
 
 
 
@@ -13794,6 +13791,7 @@ async def cmd_revoke(update, context):
 
 
         admin_ids.discard(uid)
+        sudo_ids.discard(uid)
 
 
 
