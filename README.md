@@ -27,7 +27,14 @@ The main menu is named **ROHIT FYT KA DEVTA**. It keeps these working sections:
 - **Stop Cmds** — current, global, spam, NC, raid NC, swipe, photo-loop, and bot-exit controls.
 - **Admin Ctrl** — owner/sudo-only user management, bot management, status, and thread status.
 - **Utility** — group photo save/loop/cleanup and status.
-- **Status / Full Help** — live status and the complete registered command list.
+- **Start / Help** — `~start` opens the working main menu; `~helptext` shows the complete registered command list.
+
+The previously placeholder commands are now functional:
+
+- `~start` opens the main menu.
+- `~ncthreads <1-20>` changes the NC thread setting.
+- `~sethelpvideo` saves a replied video/photo as help media.
+- `~leave` is enabled for the owner/sudo accounts and makes all configured bots leave the current chat.
 
 ## Access behavior
 
