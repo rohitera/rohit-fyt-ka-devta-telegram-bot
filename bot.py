@@ -10844,34 +10844,6 @@ async def get_status_text():
 
 
 
-# ==================== DUMMY COMMANDS ====================
-
-
-
-
-
-
-async def dummy_reply(update, context):
-
-
-
-
-
-
-    if update.message:
-
-
-
-
-
-
-        await update.message.reply_text('❌ This command is not available.')
-
-
-
-
-
-
 
 
 
@@ -14719,6 +14691,21 @@ async def cmd_help(update, context):
 
 async def cmd_helptext(update, context):
     if update.message:
+        help_media = bot_config.get("help_video_url")
+        if help_media:
+            try:
+                if bot_config.get("help_video_type") == "photo":
+                    await update.message.reply_photo(
+                        photo=help_media,
+                        caption="📚 Command index",
+                    )
+                else:
+                    await update.message.reply_video(
+                        video=help_media,
+                        caption="📚 Command index",
+                    )
+            except Exception:
+                logger.exception("Unable to send configured help media")
         await update.message.reply_text(
             get_command_index_text(),
             parse_mode="Markdown",
