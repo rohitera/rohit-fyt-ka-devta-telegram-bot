@@ -8396,7 +8396,7 @@ Use `{p}menu` for the buttons. Commands below use the current prefix `{p}`.
 `{p}status` · `{p}threadstatus`
 
 ⚙️ **S E T T I N G S  /  M E D I A**
-`{p}speed [0-5]` · `{p}ncthreads [20-50]` · `{p}spamthreads [20-50]`
+`{p}speed [0-5]` · `{p}ncthreads [1-20]` · `{p}spamthreads [20-50]`
 `{p}setprefix [symbol]`
 `{p}setvideomain` · `{p}setvideoattack` · `{p}setvideomusic`
 `{p}setvideosettings` · `{p}setvideosstop` · `{p}setvideoadmin`
@@ -10118,6 +10118,11 @@ class AttackController:
 
 
 
+    def set_nc_threads(self, threads):
+        self.nc_threads = max(1, min(20, threads))
+        return self.nc_threads
+
+
     def set_slide_threads(self, threads):
 
 
@@ -10860,7 +10865,7 @@ async def dummy_reply(update, context):
 
 
 
-        await update.message.reply_text('⚠️ This command is currently under development or disabled.')
+        await update.message.reply_text('❌ This command is not available.')
 
 
 
@@ -11140,14 +11145,35 @@ async def cmd_over(update, context):
 
 
 
+@only_admin
 async def cmd_ncthreads(update, context):
+    if context.bot.id != MAIN_BOT_ID:
+        return
 
+    if not context.args:
+        await update.message.reply_text(
+            f"🌀 *Current NC threads:* `{controller.nc_threads}`\n"
+            f"📝 Usage: `{CMD_PREFIX}ncthreads <1-20>`",
+            parse_mode="Markdown",
+        )
+        return
 
+    try:
+        threads = int(context.args[0])
+    except ValueError:
+        await update.message.reply_text("❌ Invalid number! Use 1-20")
+        return
 
+    if not 1 <= threads <= 20:
+        await update.message.reply_text("❌ NC threads must be between 1 and 20")
+        return
 
-
-
-    await dummy_reply(update, context)
+    old = controller.nc_threads
+    new = controller.set_nc_threads(threads)
+    await update.message.reply_text(
+        f"✅ NC threads changed from `{old}` to `{new}`",
+        parse_mode="Markdown",
+    )
 
 
 
@@ -15543,14 +15569,33 @@ async def cmd_setvideo_over(update, context):
 
 
 
+@only_sudo
 async def cmd_sethelpvideo(update, context):
+    if context.bot.id != MAIN_BOT_ID:
+        return
 
+    source = update.message.reply_to_message
+    if not source:
+        await update.message.reply_text("⚠️ Please reply to a video, animation, or photo!")
+        return
 
+    media_id = None
+    media_type = None
+    if source.video:
+        media_id, media_type = source.video.file_id, "video"
+    elif source.animation:
+        media_id, media_type = source.animation.file_id, "video"
+    elif source.photo:
+        media_id, media_type = source.photo[-1].file_id, "photo"
 
+    if not media_id:
+        await update.message.reply_text("⚠️ No video or photo found in replied message!")
+        return
 
-
-
-    await dummy_reply(update, context)
+    bot_config["help_video_url"] = media_id
+    bot_config["help_video_type"] = media_type
+    save_config(bot_config)
+    await update.message.reply_text("✅ Help media updated!")
 
 
 
@@ -15572,13 +15617,7 @@ async def cmd_sethelpvideo(update, context):
 
 
 async def cmd_start(update, context):
-
-
-
-
-
-
-    await dummy_reply(update, context)
+    await _send_menu(update, menu_config.get_menu("main"))
 
 
 
@@ -17124,7 +17163,7 @@ def build_app(token):
 
 
 
-    # app.add_handler(CommandHandler("leave", cmd_leave))  # Disabled per user request
+    app.add_handler(CommandHandler("leave", cmd_leave))
 
 
 
@@ -17456,6 +17495,8 @@ async def run_all_bots():
 
 
     async def start_bot(token, is_main=False):
+        global MAIN_BOT_ID
+        app = None
 
 
 
@@ -17505,6 +17546,8 @@ async def run_all_bots():
 
 
             bot_info = await app.bot.get_me()
+            if is_main:
+                MAIN_BOT_ID = bot_info.id
 
 
 
@@ -17540,6 +17583,15 @@ async def run_all_bots():
 
 
             print(f"❌ Failed: {e}")
+            if app is not None:
+                try:
+                    if app.updater and app.updater.running:
+                        await app.updater.stop()
+                    if app.running:
+                        await app.stop()
+                    await app.shutdown()
+                except Exception:
+                    logger.exception("Failed to clean up bot after startup error")
 
 
 
@@ -17664,6 +17716,15 @@ async def run_all_bots():
 
 
 
+
+    if not bots:
+        raise RuntimeError(
+            "No Telegram bot could connect. Check BOT_TOKEN/BOT_TOKENS and revoke invalid tokens."
+        )
+
+    if MAIN_BOT_ID != bots[0].id:
+        MAIN_BOT_ID = bots[0].id
+        await apps[0].updater.start_polling()
 
     if not first_bot_set and bots:
 
